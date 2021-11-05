@@ -8,14 +8,25 @@
 Servo sortServo;
 Servo columnServo;
 
-int currColumn;
+int currColumn = 8;
 
-bool Matrix[][4] = { {1,1,1,1},
-                     {0,1,1,1},
-                     {0,0,1,1},
-                     {1,0,0,1} };
-int MatCols = 4;
-int MatRows = 4;
+// 0 = "W"
+
+bool Matrix[][5] = { {0,0,0,0,0},
+                     {1,0,1,1,1},
+                     {0,0,0,0,0},
+                     {1,0,1,0,1},
+                     {1,0,1,0,1},
+                     {1,1,1,1,1},
+                     {0,0,0,0,0},
+                     {1,1,1,1,1},
+                     {0,0,0,0,0},
+                     {0,0,1,1,1},
+                     {0,0,1,0,1},
+                     {1,1,1,1,1},
+                     {0,0,0,0,0} };
+int MatCols = 5;
+int MatRows = 13;
 
 void setup() {
   // initialize serial communications
@@ -28,9 +39,10 @@ void setup() {
 
 void loop() {
 
+  setSort(0);
+  delay(3000);
+  
   for (int y = MatRows-1; y >= 0; y--) {
-
-    delay(200);
 
     for (int x = 0; x < MatCols; x++) {
 
@@ -49,13 +61,14 @@ void loop() {
 void setSort(int state) {
   // Drive servo to angle corresponding to a sorter state
   float commands[] = {60.0, 10.0, 110.0};
-  sortServo.write(commands[state]);
+  sortServo.write( commands[state] );
 }
 
 
 void setColumn(int column) {
   // Send command to stepper motor
-  columnServo.write( column * 30.0 );
+  float commands[] = {10.0, 30.0, 50.0, 70.0, 90.0};
+  columnServo.write( commands[column] );
 }
 
 
@@ -77,6 +90,6 @@ void ballCycle(int column, bool ball) {
   
   // Bring servo back to neutral to drop ball
   setSort( 0 );
-  delay(500);
+  delay(2000);
   
   }
