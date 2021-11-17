@@ -5,25 +5,51 @@
 
   <style>
 
+    .column {
+    float: left;
+    width: 50%;
+    padding: 5px;
+    }
+
     h1 {
       font-size: 50px;
     }
-
   </style>
   <link href="skeleton.css" rel="stylesheet">
 
 </head>
 <body>
 
+<section id = "title" class = "title u-full-width">
+  <div class = "container">
+    <div class= "row">
+      <h1 class="separator">Ball Matrix Display</h1>
+      <p> brought to you by our pie team! Use this website to upload an image that you would like to see displayed on our matrix ball display.</p>
+    </div>
+  </div>
+</section>
 
-<h1>Ball Matrix Display</h1>
-<h2>Ball Display</h2>
-<p>Upload and image here</p>
+<section id="upload image" class= "upload imgage u-full-width">
+  <div class = "container">
+    <div class="row">
+      <div class="twelve columns">
+        <h3 class="separator">Upload and View Image Here</h3>
+      </div>
+    <div class ="column">
+      <p>Upload an image here. Keep in mind that the Matrix Ball display will show a low resulution image that is only in black an white.</p>
+      <img id="img" alt="Image to Display" width="104" height="142">
+      <label for="myfile">Select a file:</label>
+      <input type="file" id="myfile" name="myfile", accept="image/jpeg">
+    </div>
+    <div class ="column">
+      <p>the matrix ball display will create the image below.</p>
+    </div>
+  </div>
+  </div>
+</section>
 
-<img id="img" alt="Image to Display" width="104" height="142">
 
-<label for="myfile">Select a file:</label>
-<input type="file" id="myfile" name="myfile", accept="image/jpeg">
+
 
  <script type="text/javascript">
    // function sayHello() {
