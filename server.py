@@ -12,6 +12,8 @@ def read_root():
     return FileResponse(file_path)
 
 @app.post("/upload")
+async def create_upload_file(file: UploadFile = File(...)):
+    return {"filename": file.filename}
     #confirm image is compatible
     #resize image and convert to black and white and create array
     #save array
