@@ -19,7 +19,7 @@ async def create_upload_file(file: UploadFile = File(...)):
     #save array
     #return the new image and image id
 
-@app.post("/confirm")
+#@app.post("/confirm")
     #confirm image id
     #send array to ardino
     #return printing message
