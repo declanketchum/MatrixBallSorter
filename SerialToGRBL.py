@@ -11,7 +11,7 @@ import serial
 import serial.tools.list_ports
 
 
-def main()
+def main():
     baud = 115200
     grbl_port = scan_for_grbl_board()
     ard_port = scan_for_servo_arduino()
@@ -45,7 +45,7 @@ def scan_for_grbl_board():
         if p.pid == 29987 and p.vid == 6790:
             return(p.device)
 
-    raise Exception('GRBL device not found. Check USB connection.')
+    raise Exception('GRBL device not found, unable to initialize. Check USB connection.')
 
 
 def scan_for_servo_arduino():
@@ -58,7 +58,7 @@ def scan_for_servo_arduino():
         if p.pid == 67 and p.vid == 9025:
             return(p.device)
 
-    raise Exception('Servo Arduino not found. Check USB connection.')
+    raise Exception('Servo Arduino not found, unable to initialize. Check USB connection.')
 
 
 if __name__ == '__main__':
