@@ -35,12 +35,13 @@
     </div>
     <div class= "row">
       <div class ="six columns">
-        <img id="img" alt="Uploaded Image will Display Here" width="104" height="142">
+        <img id="img" alt="Uploaded Image will Display Here" width="142" height="142">
           <label for="myfile">Select a file:</label>
           <input type="file" id="myfile" name="myfile", accept="image/jpeg">
       </div>
       <div class ="six columns">
         <p>the matrix ball display will create the image below.</p>
+        <img id="disImg" alt="Image to Display" width="142" height="142">
       </div>
     </div>
   </div>
@@ -72,15 +73,17 @@ inputElement.addEventListener("change", showImage, false);
      var file = fileList[0];
      reader.readAsDataURL(file);
      var formData = new FormData();
-     formData.append("uploadedImage", file, file.name);
-     var url = "matrixdisplaypi.local/upload";
-     var xhr = new HMLHttpRequest();
+     formData.append("uploadFile", file, file.name);
+     //var url = "matrixdisplaypi.local/upload";
+     var url = "/upload";
+     var xhr = new XMLHttpRequest();
      xhr.open("POST", url, true);
+     xhr.responseType = 'blob';
      xhr.onload = function() {
        if (xhr.status == 200) {
-         statusP.innerHTML = "upload complete!";
-       } else {
-         statusP.innerHTML = "upload error. Try again";
+         document.getElementById("disImg").src = window.URL.createObjectURL(xhr.response);
+         console.log(typeof(xhr.response))
+         //statusP.innerHTML = "upload complete!";
        }
      };
      xhr.send(formData);
