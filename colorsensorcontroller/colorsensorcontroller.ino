@@ -16,47 +16,8 @@ Adafruit_TCS34725 tcs = Adafruit_TCS34725();
 
 #define MAX 6
 
-void setup(void) {
+void setup() {
   Serial.begin(115200);
-
-  // white = 0 and black =1
-  int queue[MAX] = {0, 0, 0, 0, 0, 0}
-  int front = 0;
-  int rear = 4;
-  int itemCount = 5;
-
-  int look() {
-    return queue[front];
-  }
-
-  bool isEmpty() {
-    return itemCount == MAX;
-  }
-
-  int siz() {
-    return itemCount;
-  }
-
-  void enqueue(int color) {
-    if(!isFull()) {
-      if(rear == MAX-1) {
-        rear = -1;
-      }
-      queue[++rear] = color;
-      itemCount++;
-    }
-  }
-
-  int dequeue() {
-    int color = queue[front++];
-
-    if(front == MAX) {
-      front = 0;
-    }
-
-    itemCount--;
-    return color;
-  }
 
   if (tcs.begin()) {
     Serial.println("Found sensor");
@@ -65,32 +26,112 @@ void setup(void) {
     while (1);
   }
 
-  // Now we're ready to get readings!
+  int queue[MAX] = {0, 0, 0, 0, 0, 0}; //initialize queue with 6 white balls (must preload sorting tube with at least 5 white balls.
+ 
 }
 
 void loop(void) {
-  uint16_t r, g, b, c, colorTemp, lux;
+  uint16_t r, g, b, c, colorTemp, lux; //initize sensor variables
+    // white = 0 and black =1
+  int front = 0; //front index
+  int rear = 4; //rear index
+  int itemCount = 5; //initialize with 5 balls in queue
+  int thresholdVal = 150;
+  bool ballDropped = false;
+  bool senseBall = true;
+  bool isFull; 
+  int b5_color;
 
-  tcs.getRawData(&r, &g, &b, &c);
+  tcs.getRawData(&r, &g, &b, &c); //get data from sensor r=red, g=green, b=blue, c=clear
   colorTemp = tcs.calculateColorTemperature(r, g, b);
-  colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c);
-  lux = tcs.calculateLux(r, g, b);
+  colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c); //in kelvin
+  lux = tcs.calculateLux(r, g, b); //lumens per square meter
 
-//take a few current c values (>150 is white, <150 is black)
-  int senseVal[5];
-//majority rules to set b5_color
-//once ball drops, clear 
-  
 
-  int main() {
-    enqueue(b5_color)
+  if (senseBall) {
+    //sense the ball's color. take 5 sensor values, if above threshold assum white if below assume black,
+    int senseArr[5];
+    int senseVal = c;
+   // void loop() {
+      for (int i = 0; i <= 4; i++) {
+        int s;
+        //take a few current c values (>150 is white, <150 is black)
+        if (senseVal >= thresholdVal) {
+          s = 0;
+        } else {
+          s = 5;
+        }
+        senseArr[i] = s;
+      }
+    //}
+    
+    int b5_average = average(senseVal, MAX);
+    if(b5_average >=3) {
+      b5_color = 1;
+    }else {
+      b5_color = 0;
+    }
+    Serial.print("ball 5 color:");
+    Serial.println(b5_color);
+    senseBall = false;
+  } else{
+    int ball_to_drop = dequeue();
+    Serial.print("Ball dropped:" );
+    Serial.println(ball_to_drop);
+    //if ball to drop = 0
+    //move servo to white
+    //if ball to drop = 1
+    //move servo to black
+    //set ballDropped to true
 
-    if(isFull()) {
+     if (ballDropped) {
+       enqueue(b5_color);
+     }
+
+    if (isFull) {
       Serial.println("Queue is full!");
+      //what do if full?! shouldnt ever be full so dequeue before enqueue
     }
 
-    int ball_to_drop = dequeue();
-
-    Serial.println("Ball dropped:  %d\n", ball_to_drop)
   }
+}
+
+  int look() { //fuction to look at the front ball in queue
+  return queue[front];
+  }
+  
+  bool isEmpty() {
+    return itemCount == MAX;
+  }
+  
+  int siz() { //size of queue
+    return itemCount;
+  }
+  
+  void enqueue(int color) { //function that adds the next ball to the queue (returns nothing)
+    if (!isFull()) {
+      if (rear == MAX - 1) {
+        rear = -1;
+      }
+      queue[++rear] = color;
+      itemCount++;
+    }//else wait for ball to drop?
+  }
+
+  int dequeue() { //function to remove one item and return that item's color
+    int color = queue[front++];
+    if (front == MAX) {
+      front = 0;
+    }
+    itemCount--;
+    return color;
+    }
+    
+int average(int arr[], int n) {
+   int sum = 0;
+   int ave = 0;
+   for (int i = 0; i < n; i++)
+    sum += arr[i];
+   ave = sum/n;
+   return ave;
 }
