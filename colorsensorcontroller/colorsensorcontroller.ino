@@ -14,8 +14,49 @@ Adafruit_TCS34725 tcs = Adafruit_TCS34725();
 /* Initialise with specific int time and gain values */
 //Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
 
+#define MAX 6
+
 void setup(void) {
   Serial.begin(115200);
+
+  // white = 0 and black =1
+  int queue[MAX] = {0, 0, 0, 0, 0, 0}
+  int front = 0;
+  int rear = 4;
+  int itemCount = 5;
+
+  int look() {
+    return queue[front];
+  }
+
+  bool isEmpty() {
+    return itemCount == MAX;
+  }
+
+  int siz() {
+    return itemCount;
+  }
+
+  void enqueue(int color) {
+    if(!isFull()) {
+      if(rear == MAX-1) {
+        rear = -1;
+      }
+      queue[++rear] = color;
+      itemCount++;
+    }
+  }
+
+  int dequeue() {
+    int color = queue[front++];
+
+    if(front == MAX) {
+      front = 0;
+    }
+
+    itemCount--;
+    return color;
+  }
 
   if (tcs.begin()) {
     Serial.println("Found sensor");
@@ -30,19 +71,26 @@ void setup(void) {
 void loop(void) {
   uint16_t r, g, b, c, colorTemp, lux;
 
-  Serial.println(millis());
   tcs.getRawData(&r, &g, &b, &c);
-  Serial.println(millis());
   colorTemp = tcs.calculateColorTemperature(r, g, b);
   colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c);
   lux = tcs.calculateLux(r, g, b);
-  Serial.println();
+
+//take a few current c values (>150 is white, <150 is black)
+  int senseVal[5];
+//majority rules to set b5_color
+//once ball drops, clear 
   
-  Serial.print("Color Temp: "); Serial.print(colorTemp, DEC); Serial.print(" K - ");
-  Serial.print("Lux: "); Serial.print(lux, DEC); Serial.print(" - ");
-  Serial.print("R: "); Serial.print(r, DEC); Serial.print(" ");
-  Serial.print("G: "); Serial.print(g, DEC); Serial.print(" ");
-  Serial.print("B: "); Serial.print(b, DEC); Serial.print(" ");
-  Serial.print("C: "); Serial.print(c, DEC); Serial.print(" ");
-  Serial.println(" ");
+
+  int main() {
+    enqueue(b5_color)
+
+    if(isFull()) {
+      Serial.println("Queue is full!");
+    }
+
+    int ball_to_drop = dequeue();
+
+    Serial.println("Ball dropped:  %d\n", ball_to_drop)
+  }
 }
