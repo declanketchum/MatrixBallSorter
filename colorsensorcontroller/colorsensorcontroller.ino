@@ -26,7 +26,7 @@ void setup() {
     while (1);
   }
 
-  int queue[MAX] = {0, 0, 0, 0, 0, 0}; //initialize queue with 6 white balls (must preload sorting tube with at least 5 white balls.
+  int queue_in[MAX] = {0, 0, 0, 0, 0, 0}; //initialize queue with 6 white balls (must preload sorting tube with at least 5 white balls.
  
 }
 
@@ -39,8 +39,8 @@ void loop(void) {
   int thresholdVal = 150;
   bool ballDropped = false;
   bool senseBall = true;
-  bool isFull; 
   int b5_color;
+  int queue[MAX] = {0, 0, 0, 0, 0, 0}; //initialize queue with 6 white balls (must preload sorting tube with at least 5 white balls.
 
   tcs.getRawData(&r, &g, &b, &c); //get data from sensor r=red, g=green, b=blue, c=clear
   colorTemp = tcs.calculateColorTemperature(r, g, b);
@@ -74,8 +74,8 @@ void loop(void) {
     Serial.print("ball 5 color:");
     Serial.println(b5_color);
     senseBall = false;
-  } else{
-    int ball_to_drop = dequeue();
+    } else{
+    int ball_to_drop = dequeue(queue, front, itemCount);
     Serial.print("Ball dropped:" );
     Serial.println(ball_to_drop);
     //if ball to drop = 0
@@ -85,7 +85,7 @@ void loop(void) {
     //set ballDropped to true
 
      if (ballDropped) {
-       enqueue(b5_color);
+       enqueue(b5_color,rear, queue, itemCount, isFull);
      }
 
     if (isFull) {
@@ -96,36 +96,40 @@ void loop(void) {
   }
 }
 
-  int look() { //fuction to look at the front ball in queue
-  return queue[front];
-  }
-  
-  bool isEmpty() {
-    return itemCount == MAX;
-  }
-  
-  int siz() { //size of queue
-    return itemCount;
-  }
-  
-  void enqueue(int color) { //function that adds the next ball to the queue (returns nothing)
-    if (!isFull()) {
-      if (rear == MAX - 1) {
-        rear = -1;
-      }
-      queue[++rear] = color;
-      itemCount++;
-    }//else wait for ball to drop?
-  }
+int look(int queue[], int front) { //fuction to look at the front ball in queue
+return queue[front];
+}
 
-  int dequeue() { //function to remove one item and return that item's color
-    int color = queue[front++];
-    if (front == MAX) {
-      front = 0;
+bool isFull(int itemCount) {
+  return itemCount == MAX;
+}
+
+int siz(int itemCount) { //size of queue
+  return itemCount;
+}
+
+//int isFull() {
+//  return itemCount != M
+//}
+
+void enqueue(int color, int rear, int queue, int itemCount, bool isFull) { //function that adds the next ball to the queue (returns nothing)
+  if (!isFull(itemCount)) {
+    if (rear == MAX - 1) {
+      rear = -1;
     }
-    itemCount--;
-    return color;
-    }
+    queue[++rear] = color;
+    itemCount++;
+  }//else wait for ball to drop?
+}
+
+int dequeue(int queue[], int front, int itemCount) { //function to remove one item and return that item's color
+  int color = queue[front++];
+  if (front == MAX) {
+    front = 0;
+  }
+  itemCount--;
+  return color;
+  }
     
 int average(int arr[], int n) {
    int sum = 0;
