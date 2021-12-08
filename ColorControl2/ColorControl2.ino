@@ -1,5 +1,8 @@
 #include <Wire.h>
 #include "Adafruit_TCS34725.h"
+#include <Servo.h>
+Servo sortServo;
+Servo dropServo;
 
 /* Connect SCL    to analog 5
    Connect SDA    to analog 4
@@ -71,12 +74,14 @@ void loop() {
       colorB = 0; 
     }
     sensingB = false;
-    Serial.println(colorB);
-    
+//    Serial.println(colorB);
+//    Serial.print(queue[front]);
+//    enqueue(queue, colorB);
+//    Serial.print(queue[front]);
     //Serial.println(colorB);
   }
   //drop ball in front
-    //dequeue ball 
+    droppingB = dequeue(queue)
     //move servo 
     //make sure there is time for servo to drop ball AND return so that balls go down
   //add b5 to queue 

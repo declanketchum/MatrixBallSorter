@@ -60,7 +60,7 @@ void loop() {
 
 void setSort(int state) {
   // Drive servo to angle corresponding to a sorter state
-  float commands[] = {115.0, 135.0, 95.0};
+  float commands[] = {190.0, 5.0, 160.0};
   sortServo.write( commands[state] );
 }
 
