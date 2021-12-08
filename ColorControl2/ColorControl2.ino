@@ -29,13 +29,20 @@ void setup() {
     while (1);
   }
 
+  sortServo.attach(3);
+
 }
-#define MAX 6
-bool sensingB = true;
+
+
 int queue[MAX] = {0, 0, 0, 0, 0, 0}; 
 int itemCount = 5;
 int front = 0;
 int rear = -1;
+int droppingB; 
+int nutrualPos = 104; 
+int blackPos = 138; 
+int whitePos = 73; 
+int ballTestArr[15] = {1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0};
 
 void loop() {
   uint16_t r, g, b, c, colorTemp, lux; //initize sensor variables
@@ -50,9 +57,11 @@ void loop() {
 
   int senseVal = c;
   int senseColor;
-  int threshHold = 4000; 
+  int threshHold = 3000; 
   int colorB; 
   int aveB;
+  bool sensingB = true;
+//  delay(1000);
 
   if(senseVal >= threshHold) {
     senseColor = 0; //set color to white
@@ -68,21 +77,64 @@ void loop() {
 //      Serial.println(", ");
     }
     aveB = average(senseArr, senseSample);
+//    Serial.print("average: ");
+//    Serial.println(aveB);
     if(aveB >= 3) {
       colorB = 1 ;
     }else {
       colorB = 0; 
     }
     sensingB = false;
-//    Serial.println(colorB);
-//    Serial.print(queue[front]);
-//    enqueue(queue, colorB);
-//    Serial.print(queue[front]);
-    //Serial.println(colorB);
   }
-  //drop ball in front
-    droppingB = dequeue(queue)
-    //move servo 
+
+//  //drop ball in front
+//    delay(300);
+//    droppingB = dequeue(queue);
+//    Serial.print("dropping ball: ");
+//    Serial.println(droppingB);
+//    //move servo
+//    if(droppingB == 1) {
+//      sortServo.write(blackPos);
+//      delay(300);
+//      Serial.print("Black: ");
+//      Serial.println(blackPos);
+//    }if(droppingB==0) {
+//      sortServo.write(whitePos);
+//      delay(300);
+//      Serial.print("White: ");
+//      Serial.println(whitePos);
+//    }
+//    sortServo.write(nutrualPos);
+//    delay(300);
+//    Serial.print("Nutral: ");
+//    Serial.println(nutrualPos);
+//
+//    enqueue(queue, colorB);
+////    Serial.print("sensed color: ");
+////    Serial.println(colorB);
+////    Serial.print("ball entering: ");
+////    Serial.println(queue[rear]);
+//
+//    sensingB = true;
+
+
+    
+    Serial.print("nutral: "); 
+    Serial.print(nutrualPos);
+    sortServo.write(nutrualPos);
+    delay(3000);
+    Serial.print("  blcak: "); 
+    Serial.print(blackPos);
+    sortServo.write(blackPos);
+    delay(3000);
+    Serial.print("nutral: "); 
+    Serial.print(nutrualPos);
+    sortServo.write(nutrualPos);
+    delay(3000);
+    Serial.print("  white: "); 
+    Serial.println(whitePos);
+    sortServo.write(whitePos);
+    delay(3000);
     //make sure there is time for servo to drop ball AND return so that balls go down
   //add b5 to queue 
   //sense new b5 
@@ -96,8 +148,8 @@ void loop() {
 //  Serial.print("R: "); Serial.print(r, DEC); Serial.print(" ");
 //  Serial.print("G: "); Serial.print(g, DEC); Serial.print(" ");
 //  Serial.print("B: "); Serial.print(b, DEC); Serial.print(" ");
-  //Serial.print("C: "); Serial.print(c, DEC); Serial.print(" ");
-  //Serial.println(" ");
+//  Serial.print("C: "); Serial.print(c, DEC); Serial.print(" ");
+//  Serial.println(" ");
 }
 
 int average(int arr[], int n) {
