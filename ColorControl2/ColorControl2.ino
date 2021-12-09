@@ -57,6 +57,8 @@ void setup() {
 
   sortServo.attach(3); //attach to digital pin ~3
 
+  sortServo.write(nutrualPos);
+  //delay(200);
 }
 
 
@@ -68,7 +70,7 @@ void loop() {
 //  lux = tcs.calculateLux(r, g, b); //lumens per square meter
   
     for(int i =0; i < SENSE_SAMPLE; i++) {
-      delay(1000);
+      delay(100);
       tcs.getRawData(&r, &g, &b, &c); //get data from sensor r=red, g=green, b=blue, c=clear
       senseVal = c;
       Serial.print("senseVal: ");
@@ -105,31 +107,31 @@ void loop() {
    Serial.print("   back: ");
    Serial.print(rear);
    Serial.println(queue[rear]);
-   delay(3000);
+   //delay(3000);
    
 
   if(moveServo) {
       droppingColor = dequeue();
-      sortServo.write(nutrualPos);
-      delay(1000);
+//      sortServo.write(nutrualPos);
+//      delay(200);
 //      Serial.print("move nutrual:");
 //      Serial.print(nutrualPos);
       if(droppingColor >= 1) {
       sortServo.write(blackPos);
 //      Serial.print("   move black :");
 //      Serial.print(blackPos);
-      delay(1000);
+      delay(200);
       }else {
       sortServo.write(whitePos);
 //      Serial.print("  move white :");
 //      Serial.println(whitePos);
-      delay(1000);}
+      delay(200);}
   //    sortServo.write(nutrualPos);
   //    delay(1000);
   //    Serial.print("move nutrual:");
   //    Serial.print(nutrualPos);
      sortServo.write(nutrualPos);
-     delay(1000);
+     delay(200);
       moveServo = false;
   }else {
   
