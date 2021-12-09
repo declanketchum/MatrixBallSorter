@@ -43,98 +43,145 @@ int nutrualPos = 104;
 int blackPos = 138; 
 int whitePos = 73; 
 int ballTestArr[15] = {1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0};
+//bool sensingB = true;
+bool moveServo = false; 
 
 void loop() {
   uint16_t r, g, b, c, colorTemp, lux; //initize sensor variables
   int senseSample = 5; //take 5 color samples and average to find color
   int senseArr[senseSample] = {0, 0, 0, 0, 0};
+  Serial.println("running");
 
   //
-  tcs.getRawData(&r, &g, &b, &c); //get data from sensor r=red, g=green, b=blue, c=clear
-  colorTemp = tcs.calculateColorTemperature(r, g, b);
-  colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c); //in kelvin
-  lux = tcs.calculateLux(r, g, b); //lumens per square meter
+//  colorTemp = tcs.calculateColorTemperature(r, g, b);
+//  colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c); //in kelvin
+//  lux = tcs.calculateLux(r, g, b); //lumens per square meter
 
-  int senseVal = c;
+  int senseVal;
   int senseColor;
   int threshHold = 3000; 
   int colorB; 
   int aveB;
-  bool sensingB = true;
 //  delay(1000);
-
-  if(senseVal >= threshHold) {
-    senseColor = 0; //set color to white
-  }else {
-    senseColor = 5; //set color to black
-  }
+//    Serial.print("sensing b? beginng: ");
+//    Serial.println(sensingB);
   
-  if(sensingB) {
+  //if(sensingB) {
+//    Serial.print("sensing b? during sense: ");
+//    Serial.println(sensingB);
     for(int i =0; i < senseSample; i++) {
+      tcs.getRawData(&r, &g, &b, &c); //get data from sensor r=red, g=green, b=blue, c=clear
+      senseVal = c;
+      Serial.print("senseVal: ");
+      Serial.print(senseVal);
+      if(senseVal >= threshHold) { //higher c val means more light refelcted means ball color is white
+        senseColor = 0; //set color to white
+      }else {
+        senseColor = 5; //set color to black
+      }
+      
+      Serial.print("     sensecolor: ");
+      Serial.println(senseColor);
       senseArr[i] = senseColor;
-//      Serial.print(senseArr[i]); 
-//      Serial.print(senseVal);
-//      Serial.println(", ");
     }
-    aveB = average(senseArr, senseSample);
-//    Serial.print("average: ");
-//    Serial.println(aveB);
-    if(aveB >= 3) {
-      colorB = 1 ;
-    }else {
-      colorB = 0; 
-    }
-    sensingB = false;
-  }
-
-//  //drop ball in front
-//    delay(300);
-//    droppingB = dequeue(queue);
-//    Serial.print("dropping ball: ");
-//    Serial.println(droppingB);
-//    //move servo
-//    if(droppingB == 1) {
-//      sortServo.write(blackPos);
-//      delay(300);
-//      Serial.print("Black: ");
-//      Serial.println(blackPos);
-//    }if(droppingB==0) {
-//      sortServo.write(whitePos);
-//      delay(300);
-//      Serial.print("White: ");
-//      Serial.println(whitePos);
-//    }
-//    sortServo.write(nutrualPos);
-//    delay(300);
-//    Serial.print("Nutral: ");
-//    Serial.println(nutrualPos);
-//
-//    enqueue(queue, colorB);
-////    Serial.print("sensed color: ");
-////    Serial.println(colorB);
-////    Serial.print("ball entering: ");
-////    Serial.println(queue[rear]);
-//
-//    sensingB = true;
-
 
     
-    Serial.print("nutral: "); 
-    Serial.print(nutrualPos);
+    aveB = average(senseArr, senseSample);
+    Serial.print("average: ");
+    Serial.print(aveB);
+    if(aveB >= 3) {
+      colorB = 1 ; //black
+       Serial.print("   ball color black: ");
+       Serial.print(colorB);
+    }else {
+      colorB = 0; //white
+      Serial.print("   ball color white: ");
+      Serial.println(colorB);
+    }
+    moveServo = true;
+
+if(moveServo) {
     sortServo.write(nutrualPos);
-    delay(3000);
-    Serial.print("  blcak: "); 
-    Serial.print(blackPos);
+    delay(1000);
+    Serial.print("move nutrual:");
+    Serial.print(nutrualPos);
+    if(colorB >= 1) {
     sortServo.write(blackPos);
-    delay(3000);
-    Serial.print("nutral: "); 
-    Serial.print(nutrualPos);
-    sortServo.write(nutrualPos);
-    delay(3000);
-    Serial.print("  white: "); 
-    Serial.println(whitePos);
+    Serial.print("   move black :");
+    Serial.print(blackPos);
+    delay(1000);
+    }else {
     sortServo.write(whitePos);
-    delay(3000);
+    Serial.print("  move white :");
+    Serial.println(whitePos);
+    delay(1000);}
+//    sortServo.write(nutrualPos);
+//    delay(1000);
+//    Serial.print("move nutrual:");
+//    Serial.print(nutrualPos);
+    moveServo = false;
+}else {
+  
+}
+    
+      
+////      sensingB = false;
+////      Serial.print("sensing b? after sense: ");
+////      Serial.println(sensingB);
+//  //} else {
+////      Serial.print("sensing b? before drop: ");
+////      Serial.println(sensingB);
+//    //drop ball in front
+//      delay(1000);
+//      droppingB = dequeue(queue);
+//      Serial.print("   dropping ball color: ");
+//      Serial.print(droppingB);
+//      //move servo
+//      if(droppingB >= 1) {
+//        sortServo.write(blackPos);
+//        delay(1000);
+//        Serial.print("   move Black: ");
+//        Serial.print(blackPos);
+//      }if(droppingB <= 1) {
+//        sortServo.write(whitePos);
+//        delay(1000);
+//        Serial.print("   move White: ");
+//        Serial.print(whitePos);
+//      }
+//      sortServo.write(nutrualPos);
+//      delay(1000);
+//      Serial.print("   move Nutral: ");
+//      Serial.println(nutrualPos);
+  
+      //enqueue(queue, colorB);
+  //    Serial.print("sensed color: ");
+  //    Serial.println(colorB);
+  //    Serial.print("ball entering: ");
+  //    Serial.println(queue[rear]);
+  
+      //sensingB = true;
+      //Serial.print("sensing b? end: ");
+      //Serial.println(sensingB);
+  //}
+
+
+//    
+//    Serial.print("nutral: "); 
+//    Serial.print(nutrualPos);
+//    sortServo.write(nutrualPos);
+//    delay(3000);
+//    Serial.print("  blcak: "); 
+//    Serial.print(blackPos);
+//    sortServo.write(blackPos);
+//    delay(3000);
+//    Serial.print("nutral: "); 
+//    Serial.print(nutrualPos);
+//    sortServo.write(nutrualPos);
+//    delay(3000);
+//    Serial.print("  white: "); 
+//    Serial.println(whitePos);
+//    sortServo.write(whitePos);
+//    delay(3000);
     //make sure there is time for servo to drop ball AND return so that balls go down
   //add b5 to queue 
   //sense new b5 
