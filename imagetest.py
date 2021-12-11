@@ -24,6 +24,7 @@ pix1arr = np.reshape(pix, area, order= "F")
 print(pix1arr)
 
 data = pix1arr.tostring()
+data = data + b'\n'
 print(data)
 
 #
@@ -34,12 +35,12 @@ print(data)
 
 baud = 115200
 
-if __name__ == '__main__':
-    ser = serial.Serial('/dev/ttyACM0', baud, timeout=1)
-    ser.reset_input_buffer()
-
-while True:
-    ser.write(data)
-    line = ser.readline().decode('utf-8').rstrip()
-    print(line)
-    time.sleep(1)
+# if __name__ == '__main__':
+#     ser = serial.Serial('/dev/ttyACM0', baud, timeout=1)
+#     ser.reset_input_buffer()
+#
+# while True:
+#     ser.write(data)
+#     line = ser.readline().decode('utf-8').rstrip()
+#     print(line)
+#     time.sleep(1)
