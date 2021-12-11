@@ -15,10 +15,18 @@ void loop() {
 
   Serial.readBytesUntil('\n', data, sizeof(data)-1);
 
-  for(int i=0; i<(sizeof(data)-1), i++) {
-    
-    digitalWrite(LED_BUILTIN, data[i]);
+
+  // This should turn the LED either on or off to represent a
+  // 0 or 1 in the array, updating every half second
   
+  for(int i=0; i<sizeof(data); i++) {
+
+    // Not sure if this will work
+    // May need to check case-wise:
+    //   i.e. if bit == 0x00, led off,
+    //      elif bit == 0xff, led on
+    digitalWrite(LED_BUILTIN, bool(data[i]));
+    delay(500);
   }
     
 }
