@@ -13,19 +13,18 @@ const int LIMIT_SWITCH_Y_PIN = 10;
 
 
 // Parameters
-// !!!!!!!
-// STILL TO BE DETERMINED AND TUNED !!!!!!!
-// !!!!!!!
+
+// Chooser servo is tuned
 const int CENTER_SERVO_ANGLE = 114;
 const int LEFT_SERVO_ANGLE = CENTER_SERVO_ANGLE - 25;
 const int RIGHT_SERVO_ANGLE = CENTER_SERVO_ANGLE + 25;
-
 const int CHOOSER_SIDE_DELAY = 400;
 const int CHOOSER_CENTER_DELAY = 400;
 
+// Stepper parameters
 const int STEPPER_SPEED = 1400;
 const int STEPPER_ACCEL = 1000;
-const int STEPPER_STEPS_PER_COLUMN = 90;  // TBD!!!
+const int STEPPER_STEPS_PER_COLUMN = 114;  // To be worked on...
 
 
 int currColumn = 0;
