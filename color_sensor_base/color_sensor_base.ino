@@ -9,10 +9,10 @@
    Connect GROUND to common ground */
 
 /* Initialise with default values (int time = 2.4ms, gain = 1x) */
-// Adafruit_TCS34725 tcs = Adafruit_TCS34725();
+Adafruit_TCS34725 tcs = Adafruit_TCS34725();
 
 /* Initialise with specific int time and gain values */
-Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
+//Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
 
 void setup(void) {
   Serial.begin(115200);
@@ -33,7 +33,7 @@ void loop(void) {
   Serial.println(millis());
   tcs.getRawData(&r, &g, &b, &c);
   Serial.println(millis());
-  // colorTemp = tcs.calculateColorTemperature(r, g, b);
+  colorTemp = tcs.calculateColorTemperature(r, g, b);
   colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c);
   lux = tcs.calculateLux(r, g, b);
   Serial.println();
