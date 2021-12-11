@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 from PIL import Image
 import numpy as np
 import io
+import serial
 
 file_path = "website.html"
 app = FastAPI()
@@ -17,8 +18,8 @@ def read_root():
 @app.post("/upload")
 async def create_upload_file(uploadFile: UploadFile = File(...)):
     img = Image.open(uploadFile.file)
-    width = 40 #how many pixels wide
-    height = 40 #how many pixels tall
+    width = 35 #how many pixels wide
+    height = 35 #how many pixels tall
     #maybe figure out how to keep the aspect ratio so that images are not stretched
     resizedImg = img.resize((width,height)) #resize image to fit in matrix display
     printImg = resizedImg.convert("1") #convert image to black and white
