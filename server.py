@@ -10,6 +10,9 @@ import serial
 file_path = "website.html"
 app = FastAPI()
 
+baud = 115200
+ser = serial.Serial('/dev/ttyACM0', baud, timeout=1)
+ser.reset_input_buffer()
 
 @app.get("/")
 def read_root():
@@ -20,6 +23,7 @@ async def create_upload_file(uploadFile: UploadFile = File(...)):
     img = Image.open(uploadFile.file)
     width = 35 #how many pixels wide
     height = 35 #how many pixels tall
+    area = width*height
     #maybe figure out how to keep the aspect ratio so that images are not stretched
     resizedImg = img.resize((width,height)) #resize image to fit in matrix display
     printImg = resizedImg.convert("1") #convert image to black and white
@@ -29,6 +33,16 @@ async def create_upload_file(uploadFile: UploadFile = File(...)):
     imgByteArr = byteio.getvalue()
 
     pix = np.array(printImg) #convert black and white image to an array of true and false which will map to black and white balls
+    pix1arr = np.reshape(pix, area, order= "F")
+    pixStr = ""
+    for p in pix1arr:
+        pixStr = pixStr + str(int(p))
+    pixStr = pixStr + '\n'
+
+    data = pixStr + str(height) + '\n' + str(width) + '\n'
+    dataB = data.encode('utf-8')
+
+    ser.write(dataB)
     #send bool array to ardino javascript
     return Response(content=imgByteArr, media_type="image/jpeg")
     #confirm image is compatible

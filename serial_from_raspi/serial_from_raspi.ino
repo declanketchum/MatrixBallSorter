@@ -1,5 +1,6 @@
-byte data[1000];
-
+String datastring;
+int rows; 
+int cols;  
 
 void setup() {
   Serial.begin(115200);
@@ -9,24 +10,25 @@ void setup() {
 
 void loop() {
   
-  while(!Serial.available()) {
-    ;
-  }
+  if(Serial.available()) {
+    datastring = Serial.readStringUntil('\n');
+    rows = Serial.readStringUntil('\n').toInt();
+    cols = Serial.readStringUntil('\n').toInt();//, data, sizeof(data)-1);
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);                       // wait for a second
+    digitalWrite(LED_BUILTIN, LOW); // turn the LED off by making the voltage LOW
+    delay(1000);
 
-  Serial.readBytesUntil('\n', data, sizeof(data)-1);
+    if(rows == 35) {
+      digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+      delay(1000);                       // wait for a second
+      digitalWrite(LED_BUILTIN, LOW); 
+      delay(1000);
+      digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+      delay(1000);                       // wait for a second
+      digitalWrite(LED_BUILTIN, LOW); 
 
-
-  // This should turn the LED either on or off to represent a
-  // 0 or 1 in the array, updating every half second
-  
-  for(int i=0; i<sizeof(data); i++) {
-
-    // Not sure if this will work
-    // May need to check case-wise:
-    //   i.e. if bit == 0x00, led off,
-    //      elif bit == 0xff, led on
-    digitalWrite(LED_BUILTIN, bool(data[i]));
-    delay(500);
-  }
     
+    }
+  } 
 }
