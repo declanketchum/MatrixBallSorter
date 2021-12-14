@@ -23,8 +23,8 @@ const int CHOOSER_CENTER_DELAY = 400;
 
 // Stepper parameters
 const int STEPPER_SPEED = 300;
-const int STEPPER_ACCEL = 600;
-const int STEPPER_STEPS_PER_COLUMN = 114;  // To be worked on...
+const int STEPPER_ACCEL = 400;
+const int STEPPER_STEPS_PER_COLUMN = 130;  // To be worked on...
 
 
 int currColumn = 0;
