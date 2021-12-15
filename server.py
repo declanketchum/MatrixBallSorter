@@ -21,8 +21,8 @@ def read_root():
 @app.post("/upload")
 async def create_upload_file(uploadFile: UploadFile = File(...)):
     img = Image.open(uploadFile.file)
-    width = 35 #how many pixels wide
-    height = 35 #how many pixels tall
+    width = 20 #how many pixels wide
+    height = 25 #how many pixels tall
     area = width*height
     #maybe figure out how to keep the aspect ratio so that images are not stretched
     resizedImg = img.resize((width,height)) #resize image to fit in matrix display

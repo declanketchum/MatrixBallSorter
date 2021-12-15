@@ -8,7 +8,7 @@ void setup() {
   ElevatorServo.attach(3);
 
 }
-int sp = 160;
+int sp = 50;
 
 void loop() {
   // put your main code here, to run repeatedly:
