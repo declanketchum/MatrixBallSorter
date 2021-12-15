@@ -21,9 +21,10 @@
 
 
 Servo sortServo;
+Servo ElevatorServo;
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_1X);
 
-int queue[MAX] = {0, 0, 0, 0, 0, 0, 0}; 
+int queue[MAX] = {1, 1, 1, 1, 1, 1, 1}; 
 int itemCount = 6;
 int front = 0;
 int rear = 5;
@@ -44,6 +45,8 @@ int aveB;
 int colorB; 
 int droppingColor;
 
+int elevatorSpeed = 50;
+
 
 void setup() {
   Serial.begin(115200);
@@ -56,6 +59,7 @@ void setup() {
   }
 
   sortServo.attach(3); //attach to digital pin ~3
+  ElevatorServo.attach(5); //attach to digital pin ~3
 
   sortServo.write(nutrualPos);
   //delay(200);
@@ -64,6 +68,8 @@ void setup() {
 
 void loop() {
   Serial.println("running");
+
+  ElevatorServo.write(elevatorSpeed); 
 
 //  colorTemp = tcs.calculateColorTemperature(r, g, b);
 //  colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c); //in kelvin
