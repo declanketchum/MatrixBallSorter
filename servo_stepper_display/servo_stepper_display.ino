@@ -22,8 +22,8 @@ const int CHOOSER_SIDE_DELAY = 400;
 const int CHOOSER_CENTER_DELAY = 400;
 
 // Stepper parameters
-const int STEPPER_SPEED = 150;
-const int STEPPER_ACCEL = 300;
+const int STEPPER_SPEED = 300;
+const int STEPPER_ACCEL = 500;
 const int STEPPER_STEPS_PER_COLUMN = 114;  // To be worked on...
 
 
@@ -47,6 +47,7 @@ int currColumn = 0;
 String MatrixString;
 int MatCols; //25ish 
 int MatRows; //35
+int Area;
 
 
 
@@ -59,13 +60,6 @@ void setup() {
 
   Serial.begin(115200);
 
-
-  // connect servos
-  chooser.attach(LIMIT_SWITCH_X_PIN);
-
-  pinMode(STEPPERS_ENABLE_PIN, OUTPUT);
-
-
   carousel.connectToPins(MOTOR_X_STEP_PIN, MOTOR_X_DIR_PIN);
 
   carousel.setSpeedInStepsPerSecond(STEPPER_SPEED);
@@ -73,12 +67,14 @@ void setup() {
 
 
   // enable the stepper motors
+  pinMode(STEPPERS_ENABLE_PIN, OUTPUT);
   digitalWrite(STEPPERS_ENABLE_PIN, LOW);
-  
+
+  // connect servos
+  chooser.attach(LIMIT_SWITCH_X_PIN);
   // center the chooser servo
   chooser.write(CENTER_SERVO_ANGLE);
 
-  
 }
 
 
@@ -87,7 +83,7 @@ void loop() {
 
   // Completes one full horizontal row at a time
   // (Traverses all columns, then does next row)
-  if(Serial.available() {
+  if(Serial.available() > 0) {
 
     MatrixString = Serial.readStringUntil('\n');
     MatRows = Serial.readStringUntil('\n').toInt();
@@ -96,7 +92,7 @@ void loop() {
     
     int curCol = -1;
     for(int i = 0; i < Area; i++) {
-      ballColor = MatrixString.charAt(i);
+      char ballColor = MatrixString.charAt(i);
       if(i % MatRows == 0) {
         curCol++;
       }
