@@ -11,7 +11,7 @@ file_path = "website.html"
 app = FastAPI()
 
 baud = 115200
-ser = serial.Serial('/dev/ttyACM0', baud, timeout=1)
+ser = serial.Serial('/dev/ttyACM1', baud, timeout=1)
 ser.reset_input_buffer()
 
 @app.get("/")
