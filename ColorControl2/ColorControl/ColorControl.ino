@@ -49,14 +49,14 @@ int elevatorSpeed = 50;
 
 
 void setup() {
-  Serial.begin(115200);
-  
-  if (tcs.begin()) {
-    Serial.println("Found sensor");
-  } else {
-    Serial.println("No TCS34725 found ... check your connections");
-    while (1);
-  }
+//  Serial.begin(115200);
+//  
+//  if (tcs.begin()) {
+//    Serial.println("Found sensor");
+//  } else {
+//    Serial.println("No TCS34725 found ... check your connections");
+//    while (1);
+//  }
 
   sortServo.attach(3); //attach to digital pin ~3
   ElevatorServo.attach(5); //attach to digital pin ~3
@@ -67,7 +67,7 @@ void setup() {
 
 
 void loop() {
-  Serial.println("running");
+//  Serial.println("running");
 
   ElevatorServo.write(elevatorSpeed); 
 
@@ -79,8 +79,8 @@ void loop() {
       delay(100);
       tcs.getRawData(&r, &g, &b, &c); //get data from sensor r=red, g=green, b=blue, c=clear
       senseVal = c;
-      Serial.print("senseVal: ");
-      Serial.print(senseVal);
+//      Serial.print("senseVal: ");
+//      Serial.print(senseVal);
       if(senseVal >= threshHold) { //higher c val means more light refelcted means ball color is white
         senseColor = 0; //set color to white
       }else {
@@ -94,25 +94,25 @@ void loop() {
 
     
     aveB = average(senseArr, SENSE_SAMPLE);
-    Serial.print("average: ");
-    Serial.println(aveB);
+//    Serial.print("average: ");
+//    Serial.println(aveB);
     if(aveB >= 3) {
       colorB = 1 ; //black
-       Serial.print("   ball color black: ");
-       Serial.println(colorB);
+//       Serial.print("   ball color black: ");
+//       Serial.println(colorB);
     }else {
       colorB = 0; //white
-      Serial.print("   ball color white: ");
-      Serial.println(colorB);
+//      Serial.print("   ball color white: ");
+//      Serial.println(colorB);
     }
    enqueue();
    moveServo = true;
 
-   Serial.print("front: ");
-   Serial.print(queue[front]);
-   Serial.print("   back: ");
-   Serial.print(rear);
-   Serial.println(queue[rear]);
+//   Serial.print("front: ");
+//   Serial.print(queue[front]);
+//   Serial.print("   back: ");
+//   Serial.print(rear);
+//   Serial.println(queue[rear]);
    //delay(3000);
    
 

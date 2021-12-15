@@ -23,8 +23,8 @@ const int CHOOSER_CENTER_DELAY = 400;
 
 // Stepper parameters
 const int STEPPER_SPEED = 300;
-const int STEPPER_ACCEL = 400;
-const int STEPPER_STEPS_PER_COLUMN = 130;  // To be worked on...
+const int STEPPER_ACCEL = 500;
+const int STEPPER_STEPS_PER_COLUMN = 114;  // To be worked on...
 
 
 int currColumn = 0;
@@ -82,25 +82,32 @@ void setup() {
 
 void loop() {
 
-  // Completes one full horizontal row at a time
-  // (Traverses all columns, then does next row)
-  
-  for (int y = MatRows-1; y >= 0; y--) {
-  
-      for (int x = 0; x < MatCols; x++) {
-  
-        bool ballInSpot = Matrix[y][x];
-        
-        ballCycle(x, ballInSpot);
+  carousel.moveToPositionInSteps(1000);
+  delay(500);
+  carousel.moveToPositionInSteps(-1000);
+  delay(500);
 
-        char message[40];
-        sprintf(message, "Column %d -- Row %d -- Ball %d", x, y, ballInSpot);
-        Serial.println(message);
-      }
-    }
 
-  Serial.println("MATRIX COMPLETE!! Stopping...");
-  delay(10000000);
+//  // Completes one full horizontal row at a time
+//  // (Traverses all columns, then does next row)
+//
+//  for (int x = 0; x < MatCols; x++) {
+//
+//    for (int y = MatRows-1; y >= 0; y--) {
+//  
+//  
+//      bool ballInSpot = Matrix[y][x];
+//      
+//      ballCycle(x, ballInSpot);
+//
+//      char message[40];
+//      sprintf(message, "Column %d -- Row %d -- Ball %d", x, y, ballInSpot);
+//      Serial.println(message);
+//    }
+//  }
+//
+//  Serial.println("MATRIX COMPLETE!! Stopping...");
+//  delay(10000000);
 }
 
 
