@@ -31,8 +31,8 @@ int rear = 5;
 
 bool moveServo = false;
 int nutrualPos = 104; 
-int blackPos = 138; 
-int whitePos = 73; 
+int blackPos = 73; 
+int whitePos = 138; 
 
 //int ballTestArr[15] = {1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0};
  
