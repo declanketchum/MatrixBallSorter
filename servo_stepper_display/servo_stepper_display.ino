@@ -22,29 +22,32 @@ const int CHOOSER_SIDE_DELAY = 400;
 const int CHOOSER_CENTER_DELAY = 400;
 
 // Stepper parameters
-const int STEPPER_SPEED = 1400;
-const int STEPPER_ACCEL = 1000;
+const int STEPPER_SPEED = 150;
+const int STEPPER_ACCEL = 300;
 const int STEPPER_STEPS_PER_COLUMN = 114;  // To be worked on...
 
 
 int currColumn = 0;
 
-bool Matrix[][20] = {{1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                     {0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                     {1,0,1,0,1,0,1,1,1,0,0,1,1,1,0,1,1,1,1,0},
-                     {0,1,1,0,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0},
-                     {1,0,0,1,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0},
-                     {0,1,0,1,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0},
-                     {1,0,1,0,1,0,1,0,0,1,0,0,1,0,0,1,1,1,0,0},
-                     {0,1,1,0,1,0,1,1,1,0,0,0,1,0,0,1,0,0,0,0},
-                     {1,0,0,1,1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0},
-                     {0,1,0,1,1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0},
-                     {1,0,1,0,1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0},
-                     {0,1,1,0,1,0,1,0,0,0,0,1,1,1,0,1,1,1,1,0},
-                     {1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                     {0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
-int MatCols = 20;
-int MatRows = 14;
+//bool Matrix[][20] = {{1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+//                     {0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+//                     {1,0,1,0,1,0,1,1,1,0,0,1,1,1,0,1,1,1,1,0},
+//                     {0,1,1,0,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0},
+//                     {1,0,0,1,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0},
+//                     {0,1,0,1,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0},
+//                     {1,0,1,0,1,0,1,0,0,1,0,0,1,0,0,1,1,1,0,0},
+//                     {0,1,1,0,1,0,1,1,1,0,0,0,1,0,0,1,0,0,0,0},
+//                     {1,0,0,1,1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0},
+//                     {0,1,0,1,1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0},
+//                     {1,0,1,0,1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0},
+//                     {0,1,1,0,1,0,1,0,0,0,0,1,1,1,0,1,1,1,1,0},
+//                     {1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+//                     {0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+
+String MatrixString;
+int MatCols; //25ish 
+int MatRows; //35
+
 
 
 Servo chooser;
@@ -84,28 +87,46 @@ void loop() {
 
   // Completes one full horizontal row at a time
   // (Traverses all columns, then does next row)
-  
-  for (int y = MatRows-1; y >= 0; y--) {
-  
-      for (int x = 0; x < MatCols; x++) {
-  
-        bool ballInSpot = Matrix[y][x];
-        
-        ballCycle(x, ballInSpot);
+  if(Serial.available() {
 
-        char message[40];
-        sprintf(message, "Column %d -- Row %d -- Ball %d", x, y, ballInSpot);
-        Serial.println(message);
+    MatrixString = Serial.readStringUntil('\n');
+    MatRows = Serial.readStringUntil('\n').toInt();
+    MatCols = Serial.readStringUntil('\n').toInt();
+    Area = MatRows*MatCols; 
+    
+    int curCol = -1;
+    for(int i = 0; i < Area; i++) {
+      ballColor = MatrixString.charAt(i);
+      if(i % MatRows == 0) {
+        curCol++;
       }
+      
+      ballCycle(curCol, ballColor);
+      
     }
-
-  Serial.println("MATRIX COMPLETE!! Stopping...");
-  delay(10000000);
+    
+//    for (int x = 0; x < MatCols; x++) {
+//      
+//      for (int y = MatRows-1; y >= 0; y--) {
+//    
+//          bool ballInSpot = Matrix[y][x];
+//          
+//          ballCycle(x, ballInSpot);
+//  
+//          char message[40];
+//          sprintf(message, "Column %d -- Row %d -- Ball %d", x, y, ballInSpot);
+//          Serial.println(message);
+//        }
+//      }
+  
+    Serial.println("MATRIX COMPLETE!! Stopping...");
+    delay(10000000);
+  }
 }
 
 
 
-void ballCycle(int column, bool ball) {
+void ballCycle(int column, char ball) {
   /* Routine to drop a single ball of the right type
      into a certain column
   */
@@ -122,7 +143,7 @@ void ballCycle(int column, bool ball) {
   }
 
   // Drive servo to get appropriate ball
-  if (ball == 0) {
+  if (ball == '0') {
     chooser.write(LEFT_SERVO_ANGLE);
   } else {
     chooser.write(RIGHT_SERVO_ANGLE);  
